@@ -236,7 +236,7 @@ void *AtenderCliente (void *socket)
 			}
 			//inicializar la conexi??n, entrando nuestras claves de acceso y
 			//el nombre de la base de datos a la que queremos acceder 
-			conn = mysql_real_connect (conn, "shiva2.upc.es","root", "mysql", "T3_Juego",0, NULL, 0);
+			conn = mysql_real_connect (conn, "localhost","root", "mysql", "Juego",0, NULL, 0);
 			if (conn==NULL) 
 			{
 				printf ("Error al inicializar la conexion: %u %s\n",
@@ -285,7 +285,7 @@ void *AtenderCliente (void *socket)
 			// Ahora construimos el string con el comando SQL
 			// para insertar la persona en la base. Ese string es:
 			// INSERT INTO personas VALUES ('dni', 'nombre', edad); 
-			strcpy (consulta, "INSERT INTO T3_Juego.jugador VALUES (");
+			strcpy (consulta, "INSERT INTO Juego.jugador VALUES (");
 			//concatenamos el id
 			strcat (consulta, idultimo);
 			strcat (consulta,",'");
@@ -359,7 +359,7 @@ void *AtenderCliente (void *socket)
 			char passwordBBDD[20];
 			
 			// construimos la consulta SQL
-			strcpy (consulta,"SELECT password FROM T3_Juego.jugador WHERE jugador.nombre = '"); 
+			strcpy (consulta,"SELECT password FROM Juego.jugador WHERE jugador.nombre = '"); 
 			strcat (consulta, user);
 			strcat (consulta,"'");
 			// hacemos la consulta 
@@ -407,7 +407,7 @@ void *AtenderCliente (void *socket)
 		
 		else if(codigo==3)//Nos da el jugador que ganó la partida en menor tiempo
 		{
-			strcpy (consulta,"SELECT jugador.nombre FROM T3_Juego.jugador,T3_Juego.relacion,T3_Juego.partida WHERE partida.tiempo_stop = (SELECT MIN(partida.tiempo_stop) FROM T3_Juego.partida) AND partida.id = relacion.idPartida");
+			strcpy (consulta,"SELECT jugador.nombre FROM Juego.jugador,Juego.relacion,Juego.partida WHERE partida.tiempo_stop = (SELECT MIN(partida.tiempo_stop) FROM Juego.partida) AND partida.id = relacion.idPartida");
 			// hacemos la consulta 
 			err=mysql_query (conn, consulta); 
 			if (err!=0) {
@@ -440,7 +440,7 @@ void *AtenderCliente (void *socket)
 		{
 
 			//Construimos la consulta
-			strcpy (consulta,"SELECT partida.tiempo_stop FROM T3_Juego.jugador,T3_Juego.relacion,T3_Juego.partida WHERE jugador.nombre = '"); 
+			strcpy (consulta,"SELECT partida.tiempo_stop FROM Juego.jugador,Juego.relacion,Juego.partida WHERE jugador.nombre = '"); 
 			strcat (consulta, user);
 			strcat (consulta,"' AND jugador.id=relacion.idJugador AND relacion.idPartida=partida.id");
 			// hacemos la consulta 
@@ -476,7 +476,7 @@ void *AtenderCliente (void *socket)
 		{
 			int cont;
 			//Construimos la consulta
-			strcpy (consulta,"SELECT partida.ganador FROM T3_Juego.partida ");
+			strcpy (consulta,"SELECT partida.ganador FROM Juego.partida ");
 			// hacemos la consulta 
 			err=mysql_query (conn, consulta); 
 			if (err!=0) 
@@ -526,8 +526,7 @@ void *AtenderCliente (void *socket)
 			contadorservicios++;
 			pthread_mutex_unlock(&mutex);//Ya puedes interrumpir
 			//notificar a todos los clientes conectados
-			char notificacion[20];
-			char notificacion2[100];
+			char notificacion[100];
 			DameConectados(&miLista, misconectados);
 			sprintf(notificacion, "6/%s", misconectados);
 			int j;
@@ -544,6 +543,14 @@ void *AtenderCliente (void *socket)
 		printf("No se ha podido añadir conectado a la lista");
 	else
 		printf("Añadido a la lista de conectados");
+	char notificacion[100];
+	DameConectados(&miLista, misconectados);
+	sprintf(notificacion, "6/%s", misconectados);
+	int j;
+	for(j=0; j< misSockets.num; j++)
+	{
+		write(misSockets.sockets[j].socket, notificacion, strlen(notificacion));
+	}
 	//Se acabó el servicio para este cliente
 	close(sock_conn);
 	EliminaSocket(&misSockets, sock_conn);
@@ -552,7 +559,6 @@ void *AtenderCliente (void *socket)
 int main(int argc, char *argv[])
 {
 	int sock_conn, sock_listen;
-	int puerto=50057;
 	struct sockaddr_in serv_adr;
 	
 	//INICIALIZAMOS
@@ -568,7 +574,7 @@ int main(int argc, char *argv[])
 	//htonl formatea el numero que recibe al formato necesario
 	serv_adr.sin_addr.s_addr=htonl(INADDR_ANY);
 	//establecemos el puerto de escucha
-	serv_adr.sin_port=htons(puerto);
+	serv_adr.sin_port=htons(9070);
 	if(bind(sock_listen,(struct sockaddr *) &serv_adr, sizeof(serv_adr))<0)
 		printf("Error en el bind");
 	if(listen(sock_listen,3) <0)
