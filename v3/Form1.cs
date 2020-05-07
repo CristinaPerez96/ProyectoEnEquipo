@@ -88,8 +88,49 @@ namespace WindowsFormsApplication1
                         }
                         break;
 
+                    case 7: //Recibe invitación
+                        mensaje = trozos[1].Split('\0')[0];
+                        Form2 f2 = new Form2();
+                        f2.enviado += new Form2.Enviar(Ejecutar);
+                        f2.textBox1.Text = mensaje;
+                        f2.ShowDialog();
+                        if (textBox3.Text == "Rechazada")
+                        {
+                            string mensaje2 = "7/Rechazada/" + mensaje;
+                            // Enviamos al servidor  
+                            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
+                            server.Send(msg);
+                        }
+                        else
+                        {
+                            string mensaje2 = "7/Aceptada/" + textBox3.Text + "/" + mensaje;
+                            //Enviamos al servidor  
+                            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
+                            server.Send(msg);
+                        }
+                        break;
+
+                    case 8: //Recibe invitación
+                        mensaje = trozos[1].Split('\0')[0];
+                        if (trozos[1] == "Rechazada")
+                        {
+                            string jugador = trozos[2];
+                            MessageBox.Show(": no ha aceptado tu partida",jugador);
+                        }
+                        else
+                        {
+                            string jugador = trozos[3];
+                            MessageBox.Show(": ha aceptado tu partida", jugador);
+                            MessageBox.Show( trozos[2],"La palabra enviada por el jugador es:");
+                        }
+                        break;
                 }
             }
+        }
+
+        public void Ejecutar(string palabra)
+        {
+            textBox3.Text = palabra;
         }
 
         //Botón para conectar con el servidor
@@ -98,7 +139,7 @@ namespace WindowsFormsApplication1
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
             IPAddress direc = IPAddress.Parse("192.168.56.102");
-            IPEndPoint ipep = new IPEndPoint(direc, 9200);
+            IPEndPoint ipep = new IPEndPoint(direc, 9100);
 
             //Creamos el socket 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -189,6 +230,17 @@ namespace WindowsFormsApplication1
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
             server.Send(msg);
 
+        }
+
+        //Envía invitación para crear partida con el invitado
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var invitado = dataGridView1.Rows[e.RowIndex].Cells[0].Value;
+            MessageBox.Show(invitado.ToString(), "Has invitado a:");
+            string mensaje = "6/" + invitado;
+            // Enviamos al servidor el user tecleado 
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
         }
 
         

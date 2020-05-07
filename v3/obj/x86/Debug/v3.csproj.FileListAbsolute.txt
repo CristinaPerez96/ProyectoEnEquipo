@@ -14,3 +14,4 @@ C:\Users\perez\Documents\EETAC\2019-2020 Q2\SO\v3 modificando\v3\obj\x86\Debug\v
 C:\Users\perez\Documents\EETAC\2019-2020 Q2\SO\v3 modificando\v3\obj\x86\Debug\WindowsFormsApplication1.Form1.resources
 C:\Users\perez\Documents\EETAC\2019-2020 Q2\SO\v3 modificando\v3\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\perez\Documents\EETAC\2019-2020 Q2\SO\v3 modificando\v3\obj\x86\Debug\v3.csproj.GenerateResource.Cache
+C:\Users\perez\Documents\EETAC\2019-2020 Q2\SO\v3 modificando\v3\obj\x86\Debug\WindowsFormsApplication1.Form2.resources
