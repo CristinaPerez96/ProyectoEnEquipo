@@ -17,6 +17,7 @@ namespace WindowsFormsApplication1
     {
         Socket server;
         Thread atender;
+        delegate void DelegadoParaPonerTexto(string texto);
 
         public Form1()
         {
@@ -31,6 +32,7 @@ namespace WindowsFormsApplication1
                 //Recibimos la respuesta del servidor
                 byte[] msg2 = new byte[80];
                 server.Receive(msg2);
+                //string mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
                 
                 string [] trozos = Encoding.ASCII.GetString(msg2).Split('/');
                 int codigo = Convert.ToInt32(trozos[0]);
@@ -124,9 +126,35 @@ namespace WindowsFormsApplication1
                             MessageBox.Show( trozos[2],"La palabra enviada por el jugador es:");
                         }
                         break;
+
+                    case 9://Acepta la frase 
+                        DelegadoParaPonerTexto del = new DelegadoParaPonerTexto(PonRespuesta);
+                        this.Invoke(del,new Object[] {"Aceptada"});
+                        break;
+
+                     case 10://Rechazan la frase 
+                        del = new DelegadoParaPonerTexto(PonRespuesta);
+                        this.Invoke(del,new Object[] {"Rechazada"});
+                        break;
+                    case 11: //Recibimos la frase
+                        del = new DelegadoParaPonerTexto(PonNotificación);
+                        this.Invoke(del,new Object[] {trozos[4]});
+                        break;
                 }
             }
         }
+
+        public void PonRespuesta(string mensaje)
+        {
+            this.Respuestas.Text = mensaje;
+
+        }
+        public void PonNotificación(string mensaje)
+        {
+            this.Notificacion.Text = mensaje;
+        }
+      
+
 
         public void Ejecutar(string palabra)
         {
@@ -241,6 +269,38 @@ namespace WindowsFormsApplication1
             // Enviamos al servidor el user tecleado 
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
             server.Send(msg);
+        }
+
+        private void Respuestas_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //Enviar frase
+            string mensaje = "9/" + frasebx.Text;
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+        }
+
+        private void Activo_Click(object sender, EventArgs e)
+        { 
+            //Pasar Activo 
+            string mensaje = "10/";
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+            this.BackColor = Color.Blue;
+        }
+
+        private void Pasivo_Click(object sender, EventArgs e)
+        {
+            //Pasar Pasivo 
+            string mensaje = "11/";
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+            this.BackColor = Color.Brown;
+
         }
 
         
