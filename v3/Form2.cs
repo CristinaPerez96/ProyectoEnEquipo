@@ -35,5 +35,7 @@ namespace WindowsFormsApplication1
             enviado("Rechazada");
             this.Close();
         }
+
+        
     }
 }

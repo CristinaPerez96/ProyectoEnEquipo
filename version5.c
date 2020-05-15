@@ -30,7 +30,7 @@ typedef struct{
 int contadorservicios;
 ListaConectados miLista;
 ListaSockets misSockets;
-ListaSockets listaActivos;
+//ListaSockets listaActivos;
 
 //Estructura necesaria para acceso excluyente
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -178,14 +178,14 @@ void DameUser(ListaConectados *lista, int socket, char nombre[20]){
 		printf("No se ha encontrado ningún usuario con ese socket");
 }
 
-int Inapropiada (char frase[100])
-{
+//int Inapropiada (char frase[100])
+//{
 	//NOs devolvera -1 si la frase es inapropaida y 0 si la frase se acepta como OK
-	if (frase[0] == 'A')
-		return -1;
-	else 
-		return 0;
-}
+	//if (frase[0] == 'A')
+		//return -1;
+	//else 
+		//return 0;
+//}
 
 void *AtenderCliente (void *socket)
 {
@@ -217,7 +217,6 @@ void *AtenderCliente (void *socket)
 		peticion[ret]='\0';
 		
 		printf("Peticion: %s\n", peticion);
-		
 		//vamos a ver que nos pide el cliente
 		char *p= strtok(peticion,"/");
 		int codigo= atoi(p);
@@ -235,7 +234,7 @@ void *AtenderCliente (void *socket)
 		MYSQL_ROW row;
 		
 		
-		if((codigo!=0) && (codigo!=3) && (codigo!=6) && (codigo!=7))
+		if((codigo==1)||(codigo==2)||(codigo==4)||(codigo==5))
 		{
 			p=strtok(NULL,"/");
 			strcpy(user,p);
@@ -253,7 +252,7 @@ void *AtenderCliente (void *socket)
 			}
 			//inicializar la conexi??n, entrando nuestras claves de acceso y
 			//el nombre de la base de datos a la que queremos acceder 
-			conn = mysql_real_connect (conn, "localhost","root", "mysql", "Juego",0, NULL, 0);
+			conn = mysql_real_connect (conn, "localhost","root", "mysql", "T3_Juego",0, NULL, 0);
 			if (conn==NULL) 
 			{
 				printf ("Error al inicializar la conexion: %u %s\n",
@@ -303,7 +302,7 @@ void *AtenderCliente (void *socket)
 			// Ahora construimos el string con el comando SQL
 			// para insertar la persona en la base. Ese string es:
 			// INSERT INTO personas VALUES ('dni', 'nombre', edad); 
-			strcpy (consulta, "INSERT INTO Juego.jugador VALUES (");
+			strcpy (consulta, "INSERT INTO T3_Juego.jugador VALUES (");
 			//concatenamos el id
 			strcat (consulta, idultimo);
 			strcat (consulta,",'");
@@ -377,7 +376,7 @@ void *AtenderCliente (void *socket)
 			char passwordBBDD[20];
 			
 			// construimos la consulta SQL
-			strcpy (consulta,"SELECT password FROM Juego.jugador WHERE jugador.nombre = '"); 
+			strcpy (consulta,"SELECT password FROM T3_Juego.jugador WHERE jugador.nombre = '"); 
 			strcat (consulta, user);
 			strcat (consulta,"'");
 			// hacemos la consulta 
@@ -425,7 +424,7 @@ void *AtenderCliente (void *socket)
 		
 		else if(codigo==3)//Nos da el jugador que ganó la partida en menor tiempo
 		{
-			strcpy (consulta,"SELECT jugador.nombre FROM Juego.jugador,Juego.relacion,Juego.partida WHERE partida.tiempo_stop = (SELECT MIN(partida.tiempo_stop) FROM Juego.partida) AND partida.id = relacion.idPartida");
+			strcpy (consulta,"SELECT jugador.nombre FROM T3_Juego.jugador,T3_Juego.relacion,T3_Juego.partida WHERE partida.tiempo_stop = (SELECT MIN(partida.tiempo_stop) FROM T3_Juego.partida) AND partida.id = relacion.idPartida");
 			// hacemos la consulta 
 			err=mysql_query (conn, consulta); 
 			if (err!=0) {
@@ -458,7 +457,7 @@ void *AtenderCliente (void *socket)
 		{
 			
 			//Construimos la consulta
-			strcpy (consulta,"SELECT partida.tiempo_stop FROM Juego.jugador,Juego.relacion,Juego.partida WHERE jugador.nombre = '"); 
+			strcpy (consulta,"SELECT partida.tiempo_stop FROM T3_Juego.jugador,T3_Juego.relacion,T3_Juego.partida WHERE jugador.nombre = '"); 
 			strcat (consulta, user);
 			strcat (consulta,"' AND jugador.id=relacion.idJugador AND relacion.idPartida=partida.id");
 			// hacemos la consulta 
@@ -494,7 +493,7 @@ void *AtenderCliente (void *socket)
 		{
 			int cont;
 			//Construimos la consulta
-			strcpy (consulta,"SELECT partida.ganador FROM Juego.partida ");
+			strcpy (consulta,"SELECT partida.ganador FROM T3_Juego.partida ");
 			// hacemos la consulta 
 			err=mysql_query (conn, consulta); 
 			if (err!=0) 
@@ -586,13 +585,13 @@ void *AtenderCliente (void *socket)
 			
 			p=strtok(NULL,"/");
 			strcpy(invitacion,p);
-			//ya tenemos el nombre del invitado
 			printf("Invitacion: %s\n", invitacion);
 			if(strcmp(invitacion, "Rechazada")==0)
 			{
 				p=strtok(NULL,"/");
 				strcpy(invitador, p);
-				
+				printf("invitador: %s\n", invitador);
+				//cogemos el socket del invitado
 				while((i<miLista.num)&&(!encontrado))
 				{
 					if(sock_conn==miLista.conectados[i].socket)
@@ -601,9 +600,10 @@ void *AtenderCliente (void *socket)
 						i++;
 				}
 				if(encontrado==1)
-										sprintf(invitado, miLista.conectados[i].nombre);
+					sprintf(invitado, miLista.conectados[i].nombre);
 				
-				
+				printf("invitado: %s\n", invitado);
+				//ponemos la respuesta que queremos enviar al invitador
 				strcpy(respuesta, "8/Rechazada/");
 				strcat(respuesta, invitado);
 				printf("Respuesta: %s\n", respuesta);
@@ -614,6 +614,7 @@ void *AtenderCliente (void *socket)
 				strcpy(palabra, p);
 				p=strtok(NULL,"/");
 				strcpy(invitador, p);
+				//cogemos el socket del invitado
 				while((i<miLista.num)&&(!encontrado))
 				{
 					if(sock_conn==miLista.conectados[i].socket)
@@ -622,13 +623,22 @@ void *AtenderCliente (void *socket)
 						i++;
 				}
 				if(encontrado==1)
-										sprintf(invitado, miLista.conectados[i].nombre);
+					sprintf(invitado, miLista.conectados[i].nombre);
+				//ponemos la respuesta que queremos
 				strcpy(respuesta, "8/Aceptada/");
 				strcat(respuesta, palabra);
 				strcat(respuesta, "/");
 				strcat(respuesta, invitado);
+				
+				printf("invitador: %s\n", invitador);
+				printf("invitado: %s\n", invitado);
 				printf("Respuesta: %s\n", respuesta);
 			}
+			i=0;
+			encontrado=0;
+			printf("Invitado %s", invitado);
+			printf("Invitador %s", invitador);
+			//buscamos el socket del invitador
 			while((i<miLista.num)&&(encontrado==0))
 			{
 				if(strcmp(miLista.conectados[i].nombre, invitador)==0)
@@ -636,11 +646,82 @@ void *AtenderCliente (void *socket)
 				else
 					i++;
 			}
-			if(encontrado==1)
-									sock_invitacion= miLista.conectados[i].socket;
-			write(sock_invitacion, respuesta, strlen(respuesta));
+			if(encontrado!=0)
+			{
+				sock_invitacion= miLista.conectados[i].socket;
+				write(sock_invitacion, respuesta, strlen(respuesta));
+			}
 		}
 		
+		else if(codigo==8) //Recibimos la palabra del invitado
+		{
+			
+			char invitacion[20];
+			int i=0;
+			int encontrado=0;
+			int sock_invitacion;
+			
+			p=strtok(NULL,"/");
+			strcpy(invitacion,p);
+			if(invitacion =="Rechazada")
+			{
+				p=strtok(NULL, "/");
+				strcpy(invitado, p);
+				while((i<miLista.num)&&(!encontrado))
+				{
+					if(sock_conn==miLista.conectados[i].socket)
+						encontrado=1;
+					else
+						i++;
+				}
+				if(encontrado==1)
+										sprintf(invitador, miLista.conectados[i].nombre);
+				printf("Invitador: %s\n", invitador);
+				strcpy(respuesta, "9/Rechazada/");
+				strcat(respuesta, invitador);
+				printf("Respuesta: %s\n", respuesta);
+				
+			}
+			else
+			{
+				p=strtok(NULL,"/");
+				strcpy(palabra, p);
+				p=strtok(NULL,"/");
+				strcpy(invitado,p);
+				while((i<miLista.num)&&(!encontrado))
+				{
+					if(sock_conn==miLista.conectados[i].socket)
+						encontrado=1;
+					else
+						i++;
+				}
+				if(encontrado==1)
+										sprintf(invitador, miLista.conectados[i].nombre);
+				printf("Invitador: %s\n", invitador);
+				strcpy(respuesta, "9/Aceptada/");
+				strcat(respuesta, palabra);
+				strcat(respuesta, "/");
+				strcat(respuesta, invitador);
+				printf("Respuesta: %s\n", respuesta);
+			}
+			printf("Invitado %s", invitado);
+			printf("Invitador %s", invitador);
+			i=0;
+			encontrado=0;
+			// buscamos el socket del invitado y le enviamos el mensaje "7/Invitador"
+			while((i<miLista.num)&&(encontrado==0))
+			{
+				if(strcmp(miLista.conectados[i].nombre, invitado)==0)
+					encontrado=1;
+				else
+					i++;
+			}
+			if(encontrado!=0)
+			{
+				sock_invitacion=miLista.conectados[i].socket;
+				write(sock_invitacion, respuesta, strlen(respuesta));
+			}
+		}
 		//envia una frase
 /*		else if (codigo==9) *///envia una frase
 /*		{*/
@@ -668,7 +749,7 @@ void *AtenderCliente (void *socket)
 		
 		
 		
-		if((codigo!=0)&&(codigo!=6)&&(codigo!=7))
+		if((codigo!=0)&&(codigo!=6)&&(codigo!=7)&&(codigo!=8))
 		{
 			printf("Respuesta: %s\n", respuesta);
 			//Enviamos respuesta
@@ -691,9 +772,9 @@ void *AtenderCliente (void *socket)
 	DameUser (&miLista, sock_conn, user);
 	res= EliminaConectado(&miLista, user);
 	if(res==-1)
-		printf("No se ha podido añadir conectado a la lista");
+		printf("No se ha podido quitar conectado de la lista");
 	else
-		printf("A�adido a la lista de conectados");
+		printf("Quitado de la lista de conectados");
 	DameConectados(&miLista, misconectados);
 	sprintf(notificacion, "6/%s", misconectados);
 	int j;
@@ -705,7 +786,7 @@ void *AtenderCliente (void *socket)
 	//Quitamos el socket de la lista 
 	//Se acabó el servicio para este cliente
 	pthread_mutex_lock( &mutex );
-	EliminaSocket(&listaActivos,sock_conn);
+	//EliminaSocket(&listaActivos,sock_conn);
 	EliminaSocket(&misSockets, sock_conn);
 	close(sock_conn);
 	
@@ -729,7 +810,7 @@ int main(int argc, char *argv[])
 	//htonl formatea el numero que recibe al formato necesario
 	serv_adr.sin_addr.s_addr=htonl(INADDR_ANY);
 	//establecemos el puerto de escucha
-	serv_adr.sin_port=htons(9100);
+	serv_adr.sin_port=htons(9800);
 	if(bind(sock_listen,(struct sockaddr *) &serv_adr, sizeof(serv_adr))<0)
 		printf("Error en el bind");
 	if(listen(sock_listen,3) <0)
@@ -738,7 +819,7 @@ int main(int argc, char *argv[])
 	//int i;
 	int sockets[100];
 	// para iniciar la lista de activos 
-	listaActivos.num = 0;
+	//listaActivos.num = 0;
 	
 	
 	pthread_t thread;
