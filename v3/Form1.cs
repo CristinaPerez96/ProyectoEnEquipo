@@ -21,7 +21,39 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
+            Thread frm2 = new Thread(new ThreadStart(startForm2));
+            frm2.Start();
             CheckForIllegalCrossThreadCalls = false;
+        }
+        Form2 form2 = new Form2();
+        public void startForm2()
+        {
+            Application.Run(form2);
+        }
+
+        public void transferirTexto(string frase)
+        {
+            if (form2.Notificaciontext.InvokeRequired)
+                form2.Notificaciontext.Invoke((MethodInvoker)delegate()
+                {
+                    transferirTexto(frase);
+                   
+                });
+
+            else form2.Notificaciontext.Text = frase;
+        
+        }
+
+        public void close()
+        {
+
+            if (form2.Notificaciontext.InvokeRequired)
+                form2.Notificaciontext.Invoke((MethodInvoker)delegate()
+                {
+                    close();
+                });
+
+            else form2.Close();
         }
 
         private void AtenderServidor()
@@ -138,7 +170,7 @@ namespace WindowsFormsApplication1
         {
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
-            IPAddress direc = IPAddress.Parse("192.168.56.102");
+            IPAddress direc = IPAddress.Parse("192.168.56.101");
             IPEndPoint ipep = new IPEndPoint(direc, 9100);
 
             //Creamos el socket 
@@ -241,6 +273,16 @@ namespace WindowsFormsApplication1
             // Enviamos al servidor el user tecleado 
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
             server.Send(msg);
+        }
+
+        private void enviarform3_Click(object sender, EventArgs e)
+        {
+            transferirTexto(textBox4.Text);
+        }
+
+        private void apagarform3_Click(object sender, EventArgs e)
+        {
+            close();
         }
 
         
