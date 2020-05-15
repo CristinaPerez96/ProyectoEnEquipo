@@ -21,8 +21,40 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
+            //Thread frm2 = new Thread(new ThreadStart(startForm2));
+            //frm2.Start();
             CheckForIllegalCrossThreadCalls = false;
         }
+        Form2 form2 = new Form2();
+        public void startForm2()
+        {
+            Application.Run(form2);
+        }
+
+        //public void transferirTexto(string frase)
+        //{
+        //    if (form2.Notificaciontext.InvokeRequired)
+        //        form2.Notificaciontext.Invoke((MethodInvoker)delegate()
+        //        {
+        //            transferirTexto(frase);
+                   
+        //        });
+
+        //    else form2.Notificaciontext.Text = frase;
+        
+        //}
+
+        //public void close()
+        //{
+
+        //    if (form2.Notificaciontext.InvokeRequired)
+        //        form2.Notificaciontext.Invoke((MethodInvoker)delegate()
+        //        {
+        //            close();
+        //        });
+
+        //    else form2.Close();
+        //}
 
         private void AtenderServidor()
         {
@@ -88,42 +120,97 @@ namespace WindowsFormsApplication1
                         }
                         break;
 
-                    case 7: //Recibe invitación
-                        mensaje = trozos[1].Split('\0')[0];
+                    case 7: //Recibe invitación del invitador
+                        string invitador = trozos[1].Split('\0')[0];
                         Form2 f2 = new Form2();
                         f2.enviado += new Form2.Enviar(Ejecutar);
-                        f2.textBox1.Text = mensaje;
+                        f2.textBox1.Text = invitador;
                         f2.ShowDialog();
                         if (textBox3.Text == "Rechazada")
                         {
-                            string mensaje2 = "7/Rechazada/" + mensaje;
+                            string mensaje2 = "7/Rechazada/" + invitador;
                             // Enviamos al servidor  
                             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                             server.Send(msg);
                         }
                         else
                         {
-                            string mensaje2 = "7/Aceptada/" + textBox3.Text + "/" + mensaje;
+                            string mensaje2 = "7/Aceptada/" + textBox3.Text + "/" + invitador;
                             //Enviamos al servidor  
                             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                             server.Send(msg);
                         }
                         break;
 
-                    case 8: //Recibe invitación
+                    case 8: //Recibe contestación del invitado
                         mensaje = trozos[1].Split('\0')[0];
                         if (trozos[1] == "Rechazada")
                         {
-                            string jugador = trozos[2];
-                            MessageBox.Show(": no ha aceptado tu partida",jugador);
+                            string invitado = trozos[2];
+                            MessageBox.Show(": ha finalizado la partida",invitado);
                         }
                         else
                         {
-                            string jugador = trozos[3];
-                            MessageBox.Show(": ha aceptado tu partida", jugador);
+                            string invitado = trozos[3];
+                            MessageBox.Show(": continua con la partida", invitado);
                             MessageBox.Show( trozos[2],"La palabra enviada por el jugador es:");
+                            Form3 f3 = new Form3();
+                            f3.enviado += new Form3.Enviar(Ejecutar);
+                            f3.textBox1.Text = invitado;
+                            f3.ShowDialog();
+                            if (textBox3.Text == "Rechazada")
+                            {
+                                string mensaje2 = "8/Rechazada/" + invitado;
+                                // Enviamos al servidor  
+                                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
+                                server.Send(msg);
+                            }
+                            else
+                            {
+                                string mensaje2 = "8/Aceptada/" + textBox3.Text + "/" + invitado;
+                                //Enviamos al servidor  
+                                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
+                                server.Send(msg);
+                            }
+
                         }
                         break;
+
+                    case 9: //recibe contestación del invitador
+                        mensaje = trozos[1].Split('\0')[0];
+                        if (trozos[1] == "Rechazada")
+                        {
+                            string invitador2 = trozos[3];
+                            MessageBox.Show(": ha finalizado la partida",invitador2);
+                        }
+                        else
+                        {
+                            string invitador2 = trozos[3];
+                            MessageBox.Show(": continua con la partida", invitador2);
+                            MessageBox.Show( trozos[2],"La palabra enviada por el jugador es:");
+                            Form3 f3 = new Form3();
+                            f3.enviado += new Form3.Enviar(Ejecutar);
+                            f3.textBox1.Text = invitador2;
+                            f3.ShowDialog();
+                            if (textBox3.Text == "Rechazada")
+                            {
+                                string mensaje2 = "7/Rechazada/" + invitador2;
+                                // Enviamos al servidor  
+                                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
+                                server.Send(msg);
+                            }
+                            else
+                            {
+                                string mensaje2 = "7/Aceptada/" + textBox3.Text + "/" + invitador2;
+                                //Enviamos al servidor  
+                                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
+                                server.Send(msg);
+                            }
+
+                        }
+                        break;
+
+                    
                 }
             }
         }
@@ -138,8 +225,13 @@ namespace WindowsFormsApplication1
         {
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
+<<<<<<< HEAD
             IPAddress direc = IPAddress.Parse("192.168.56.102");
             IPEndPoint ipep = new IPEndPoint(direc, 9200);
+=======
+            IPAddress direc = IPAddress.Parse("192.168.56.103");
+            IPEndPoint ipep = new IPEndPoint(direc, 9800);
+>>>>>>> dev-v5.1
 
             //Creamos el socket 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -243,7 +335,16 @@ namespace WindowsFormsApplication1
             server.Send(msg);
         }
 
-        
+        //private void enviarform3_Click(object sender, EventArgs e)
+        //{
+        //    transferirTexto(textBox4.Text);
+        //}
+
+        //private void apagarform3_Click(object sender, EventArgs e)
+        //{
+        //    close();
+        //}
+
 
     }
 }

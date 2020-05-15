@@ -10,32 +10,33 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
+
 namespace WindowsFormsApplication1
 {
-    public partial class Form2 : Form
+    public partial class Form3 : Form
     {
         public delegate void Enviar(string palabra);
         public event Enviar enviado;
 
-        public Form2()
+        public Form3()
         {
             InitializeComponent();
         }
 
-        //Aceptamos partida
+        
+
         private void button1_Click(object sender, EventArgs e)
         {
             enviado(textBox2.Text);
             this.Close();
         }
 
-        //Rechazamos partida
+        
+
         private void button2_Click(object sender, EventArgs e)
         {
             enviado("Rechazada");
             this.Close();
         }
-
-        
     }
 }
