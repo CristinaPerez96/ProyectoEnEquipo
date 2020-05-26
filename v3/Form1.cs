@@ -18,43 +18,19 @@ namespace WindowsFormsApplication1
         Socket server;
         Thread atender;
 
+        public delegate void Enviar(string palabra);
+
         public Form1()
         {
             InitializeComponent();
-            //Thread frm2 = new Thread(new ThreadStart(startForm2));
-            //frm2.Start();
             CheckForIllegalCrossThreadCalls = false;
         }
-        Form2 form2 = new Form2();
-        public void startForm2()
-        {
-            Application.Run(form2);
-        }
-
-        //public void transferirTexto(string frase)
-        //{
-        //    if (form2.Notificaciontext.InvokeRequired)
-        //        form2.Notificaciontext.Invoke((MethodInvoker)delegate()
-        //        {
-        //            transferirTexto(frase);
-                   
-        //        });
-
-        //    else form2.Notificaciontext.Text = frase;
         
-        //}
 
-        //public void close()
-        //{
-
-        //    if (form2.Notificaciontext.InvokeRequired)
-        //        form2.Notificaciontext.Invoke((MethodInvoker)delegate()
-        //        {
-        //            close();
-        //        });
-
-        //    else form2.Close();
-        //}
+        private void PonMensaje (string mensaje)
+        {
+            Registrado.Text= mensaje;
+        }
 
         private void AtenderServidor()
         {
@@ -71,27 +47,37 @@ namespace WindowsFormsApplication1
                 {
                     case 1: //Registra al nuevo usuario
                         mensaje = trozos[1].Split('\0')[0];
-                        MessageBox.Show(mensaje);
+                        Enviar de = new Enviar(PonMensaje);
+                        this.Invoke(de, new object[] { mensaje });
+                        //MessageBox.Show(mensaje);
                         break;
 
                     case 2: //Inicia sesión
                         mensaje = trozos[1].Split('\0')[0];
-                        MessageBox.Show(mensaje);
+                        de = new Enviar(PonMensaje);
+                        this.Invoke(de, new object[] { mensaje });
+                        //MessageBox.Show(mensaje);
                         break;
 
                     case 3: //Consulta el jugador que ganó en menor tiempo
                         mensaje = trozos[1].Split('\0')[0];
-                        MessageBox.Show(mensaje);
+                        de = new Enviar(PonMensaje);
+                        this.Invoke(de, new object[] { mensaje });
+                        //MessageBox.Show(mensaje);
                         break;
 
                     case 4: //Consulta el menor tiempo en ganar del jugador "usuario"
                         mensaje = trozos[1].Split('\0')[0];
-                        MessageBox.Show(mensaje);
+                        de = new Enviar(PonMensaje);
+                        this.Invoke(de, new object[] { mensaje });
+                        //MessageBox.Show(mensaje);
                         break;
 
                     case 5: //Consulta el número de partidas ganadas por el jugador "usuario"
                         mensaje = trozos[1].Split('\0')[0];
-                        MessageBox.Show(mensaje);
+                        de = new Enviar(PonMensaje);
+                        this.Invoke(de, new object[] { mensaje });
+                        //MessageBox.Show(mensaje);
                         break;
 
                     case 6: //Notificación lista conectados
@@ -180,7 +166,7 @@ namespace WindowsFormsApplication1
                         mensaje = trozos[1].Split('\0')[0];
                         if (trozos[1] == "Rechazada")
                         {
-                            string invitador2 = trozos[3];
+                            string invitador2 = trozos[2];
                             MessageBox.Show(": ha finalizado la partida",invitador2);
                         }
                         else
@@ -225,13 +211,8 @@ namespace WindowsFormsApplication1
         {
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
-<<<<<<< HEAD
-            IPAddress direc = IPAddress.Parse("192.168.56.102");
-            IPEndPoint ipep = new IPEndPoint(direc, 9200);
-=======
-            IPAddress direc = IPAddress.Parse("192.168.56.103");
-            IPEndPoint ipep = new IPEndPoint(direc, 9800);
->>>>>>> dev-v5.1
+            IPAddress direc = IPAddress.Parse("147.83.117.22");
+            IPEndPoint ipep = new IPEndPoint(direc, 50057);
 
             //Creamos el socket 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -335,15 +316,9 @@ namespace WindowsFormsApplication1
             server.Send(msg);
         }
 
-        //private void enviarform3_Click(object sender, EventArgs e)
-        //{
-        //    transferirTexto(textBox4.Text);
-        //}
+        
 
-        //private void apagarform3_Click(object sender, EventArgs e)
-        //{
-        //    close();
-        //}
+        
 
 
     }

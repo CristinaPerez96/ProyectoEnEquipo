@@ -43,12 +43,13 @@
             this.Jugador = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.Registrado = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 22);
+            this.button1.Location = new System.Drawing.Point(12, 11);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(103, 47);
@@ -59,7 +60,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(179, 22);
+            this.button2.Location = new System.Drawing.Point(147, 11);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(103, 47);
@@ -70,7 +71,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(31, 228);
+            this.button3.Location = new System.Drawing.Point(21, 171);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(103, 44);
@@ -81,7 +82,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(179, 228);
+            this.button4.Location = new System.Drawing.Point(169, 171);
             this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(103, 44);
@@ -93,7 +94,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 105);
+            this.label1.Location = new System.Drawing.Point(38, 82);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(57, 17);
             this.label1.TabIndex = 4;
@@ -102,7 +103,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(28, 156);
+            this.label2.Location = new System.Drawing.Point(37, 133);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(69, 17);
             this.label2.TabIndex = 5;
@@ -110,7 +111,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(105, 105);
+            this.textBox1.Location = new System.Drawing.Point(114, 82);
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 22);
@@ -118,7 +119,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(105, 153);
+            this.textBox2.Location = new System.Drawing.Point(114, 130);
             this.textBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 22);
@@ -127,7 +128,7 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(41, 289);
+            this.radioButton1.Location = new System.Drawing.Point(31, 232);
             this.radioButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(382, 21);
@@ -140,7 +141,7 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(41, 334);
+            this.radioButton2.Location = new System.Drawing.Point(31, 277);
             this.radioButton2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(331, 21);
@@ -153,7 +154,7 @@
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(41, 378);
+            this.radioButton3.Location = new System.Drawing.Point(31, 321);
             this.radioButton3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(306, 21);
@@ -168,7 +169,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Jugador});
-            this.dataGridView1.Location = new System.Drawing.Point(528, 43);
+            this.dataGridView1.Location = new System.Drawing.Point(526, 11);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
@@ -183,7 +184,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(657, 421);
+            this.textBox3.Location = new System.Drawing.Point(655, 371);
             this.textBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(111, 22);
@@ -192,17 +193,27 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(525, 421);
+            this.label4.Location = new System.Drawing.Point(515, 371);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(115, 17);
             this.label4.TabIndex = 17;
             this.label4.Text = "Palabra enviada:";
             // 
+            // Registrado
+            // 
+            this.Registrado.AutoSize = true;
+            this.Registrado.Location = new System.Drawing.Point(30, 420);
+            this.Registrado.Name = "Registrado";
+            this.Registrado.Size = new System.Drawing.Size(76, 17);
+            this.Registrado.TabIndex = 18;
+            this.Registrado.Text = "Respuesta";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(835, 466);
+            this.ClientSize = new System.Drawing.Size(835, 470);
+            this.Controls.Add(this.Registrado);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.dataGridView1);
@@ -242,6 +253,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Jugador;
         public System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label Registrado;
     }
 }
 
