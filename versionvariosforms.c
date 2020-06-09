@@ -27,7 +27,7 @@ typedef struct{
 	int num;
 } ListaConectados;
 
-int contadorservicios;
+//int contadorservicios;
 ListaConectados miLista;
 ListaSockets misSockets;
 //ListaSockets listaActivos;
@@ -173,7 +173,7 @@ void DameUser(ListaConectados *lista, int socket, char nombre[20]){
 			i++;
 	}
 	if(encontrado)
-							sprintf(nombre, "%s", lista->conectados[i].nombre);
+		sprintf(nombre, "%s", lista->conectados[i].nombre);
 	else
 		printf("No se ha encontrado ningún usuario con ese socket");
 }
@@ -227,6 +227,9 @@ void *AtenderCliente (void *socket)
 		char password[20];
 		char invitado[20];
 		char invitador[20];
+		char respuestainvitado[200];
+		char respuestainvitador[200];
+		char letra[1];
 		int err;
 		int id;
 		char idultimo[10];
@@ -555,6 +558,7 @@ void *AtenderCliente (void *socket)
 			int encontrado=0;
 			int sock_invitacion;
 			
+			strcpy(letra, "a");
 			p=strtok(NULL,"/");
 			strcpy(invitado,p);
 			//ya tenemos el nombre del invitado
@@ -572,9 +576,9 @@ void *AtenderCliente (void *socket)
 			printf("Invitador: %s\n", invitador);
 			
 			//añadimos la respuesta que queremos que envie al invitado
-			sprintf(respuesta, "7/%d/",numForm); 
-			strcat (respuesta, invitador);
-			printf("Respuesta: %s\n", respuesta);
+			sprintf(respuestainvitado, "7/%d/%s/",numForm,letra); 
+			strcat (respuestainvitado, invitador);
+			printf("Respuesta invitado: %s\n", respuestainvitado);
 			
 			i=0;
 			encontrado=0;
@@ -590,7 +594,7 @@ void *AtenderCliente (void *socket)
 			if(encontrado!=0)
 			{
 				sock_invitacion=miLista.conectados[i].socket;
-				write(sock_invitacion, respuesta, strlen(respuesta));
+				write(sock_invitacion, respuestainvitado, strlen(respuestainvitado));
 			}
 		}
 		else if(codigo==7) //Recibimos la contestación a la invitación 
@@ -621,14 +625,14 @@ void *AtenderCliente (void *socket)
 				
 				printf("invitado: %s\n", invitado);
 				//ponemos la respuesta que queremos enviar al invitador
-				sprintf(respuesta, "8/%d/Rechazada/",numForm);
-				strcat(respuesta, invitado);
-				printf("Respuesta: %s\n", respuesta);
+				sprintf(respuestainvitador, "8/%d/Rechazada/",numForm);
+				strcat(respuestainvitador, invitado);
+				printf("Respuesta: %s\n", respuestainvitador);
 			}
 			else
 			{
 				p=strtok(NULL,"/");
-				strcpy(palabra, p);
+				strcpy(letra, p);
 				p=strtok(NULL,"/");
 				strcpy(invitador, p);
 				//cogemos el socket del invitado
@@ -642,19 +646,25 @@ void *AtenderCliente (void *socket)
 				if(encontrado==1)
 					sprintf(invitado, miLista.conectados[i].nombre);
 				//ponemos la respuesta que queremos
-				sprintf(respuesta, "8/%d/Aceptada/",numForm);
-				strcat(respuesta, palabra);
-				strcat(respuesta, "/");
-				strcat(respuesta, invitado);
+				sprintf(respuestainvitador, "8/%d/Aceptada/",numForm);
+				strcat(respuestainvitador, letra);
+				strcat(respuestainvitador, "/");
+				strcat(respuestainvitador, invitado);
+				
+				sprintf(respuestainvitado, "8/%d/Aceptada/", numForm);
+				strcat(respuestainvitado,letra);
+				strcat(respuestainvitado, "/");
+				strcat(respuestainvitado, invitador);
 				
 				printf("invitador: %s\n", invitador);
 				printf("invitado: %s\n", invitado);
-				printf("Respuesta: %s\n", respuesta);
+				printf("Respuesta invitador: %s\n", respuestainvitador);
+				printf("Respuesta invitado: %s\n", respuestainvitado);
 			}
 			i=0;
 			encontrado=0;
-			printf("Invitado %s", invitado);
-			printf("Invitador %s", invitador);
+			printf("Invitado %s\n", invitado);
+			printf("Invitador %s\n", invitador);
 			//buscamos el socket del invitador
 			while((i<miLista.num)&&(encontrado==0))
 			{
@@ -666,25 +676,27 @@ void *AtenderCliente (void *socket)
 			if(encontrado!=0)
 			{
 				sock_invitacion= miLista.conectados[i].socket;
-				write(sock_invitacion, respuesta, strlen(respuesta));
+				//enviamos la partida a los dos jugadores
+				write(sock_invitacion, respuestainvitador, strlen(respuestainvitador));
+				write(sock_conn, respuestainvitado, strlen(respuestainvitado));
 			}
 		}
 		
-		else if(codigo==8) //Recibimos la palabra del invitado
+		else if(codigo==8) //Recibimos las palabras y las guardamos
 		{
-			
 			char invitacion[20];
 			int i=0;
 			int encontrado=0;
 			int sock_invitacion;
+			char contrincante[20];
+			char jugador[20];
 			
 			p=strtok(NULL,"/");
 			strcpy(invitacion,p);
 			if(invitacion =="Rechazada")
 			{
-				printf("hola");
 				p=strtok(NULL, "/");
-				strcpy(invitado, p);
+				strcpy(contrincante, p);
 				while((i<miLista.num)&&(!encontrado))
 				{
 					if(sock_conn==miLista.conectados[i].socket)
@@ -693,19 +705,35 @@ void *AtenderCliente (void *socket)
 						i++;
 				}
 				if(encontrado==1)
-					sprintf(invitador, miLista.conectados[i].nombre);
-				printf("Invitador: %s\n", invitador);
+					sprintf(jugador, miLista.conectados[i].nombre);
+				printf("Contrincante: %s\n", contrincante);
 				sprintf(respuesta, "9/%d/Rechazada/",numForm);
-				strcat(respuesta, invitador);
+				strcat(respuesta, jugador);
 				printf("Respuesta: %s\n", respuesta);
-				
+				printf("Contrincante %s", contrincante);
+				printf("Jugador %s", jugador);
+				i=0;
+				encontrado=0;
+				// buscamos el socket del invitado y le enviamos el mensaje "7/Invitador"
+				while((i<miLista.num)&&(encontrado==0))
+				{
+					if(strcmp(miLista.conectados[i].nombre, contrincante)==0)
+						encontrado=1;
+					else
+						i++;
+				}
+				if(encontrado!=0)
+				{
+					sock_invitacion=miLista.conectados[i].socket;
+					write(sock_invitacion, respuesta, strlen(respuesta));
+				}
 			}
 			else
 			{
 				p=strtok(NULL,"/");
 				strcpy(palabra, p);
 				p=strtok(NULL,"/");
-				strcpy(invitado,p);
+				strcpy(contrincante,p);
 				while((i<miLista.num)&&(!encontrado))
 				{
 					if(sock_conn==miLista.conectados[i].socket)
@@ -714,31 +742,10 @@ void *AtenderCliente (void *socket)
 						i++;
 				}
 				if(encontrado==1)
-										sprintf(invitador, miLista.conectados[i].nombre);
-				printf("Invitador: %s\n", invitador);
-				sprintf(respuesta, "9/%d/Aceptada/",numForm);
-				strcat(respuesta, palabra);
-				strcat(respuesta, "/");
-				strcat(respuesta, invitador);
-				printf("Respuesta: %s\n", respuesta);
+					sprintf(jugador, miLista.conectados[i].nombre);
+				printf("Jugador: %s\n", jugador);
 			}
-			printf("Invitado %s", invitado);
-			printf("Invitador %s", invitador);
-			i=0;
-			encontrado=0;
-			// buscamos el socket del invitado y le enviamos el mensaje "7/Invitador"
-			while((i<miLista.num)&&(encontrado==0))
-			{
-				if(strcmp(miLista.conectados[i].nombre, invitado)==0)
-					encontrado=1;
-				else
-					i++;
-			}
-			if(encontrado!=0)
-			{
-				sock_invitacion=miLista.conectados[i].socket;
-				write(sock_invitacion, respuesta, strlen(respuesta));
-			}
+			
 		}
 		
 		
@@ -804,7 +811,7 @@ int main(int argc, char *argv[])
 	//htonl formatea el numero que recibe al formato necesario
 	serv_adr.sin_addr.s_addr=htonl(INADDR_ANY);
 	//establecemos el puerto de escucha
-	serv_adr.sin_port=htons(9400);
+	serv_adr.sin_port=htons(9200);
 	if(bind(sock_listen,(struct sockaddr *) &serv_adr, sizeof(serv_adr))<0)
 		printf("Error en el bind");
 	if(listen(sock_listen,3) <0)
