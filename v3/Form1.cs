@@ -135,11 +135,13 @@ namespace WindowsFormsApplication1
                         break;
 
                     case 7: //Recibe invitación del invitador
-                        string invitador = trozos[2].Split('\0')[0];
+                        string invitador = trozos[3].Split('\0')[0];
                         nForm = Convert.ToInt32(trozos[1]);
+                        string letra = trozos[2];
                         Form2 f2 = new Form2();
                         f2.enviado += new Form2.Enviar(Ejecutar);
                         f2.textBox1.Text = invitador;
+                        f2.textBox2.Text = letra;
                         f2.ShowDialog();
                         if (textBox3.Text == "Rechazada")
                         {
@@ -150,7 +152,7 @@ namespace WindowsFormsApplication1
                         }
                         else
                         {
-                            string mensaje2 = "7/" + nForm + "/Aceptada/" + textBox3.Text + "/" + invitador;
+                            string mensaje2 = "7/" + nForm + "/Aceptada/" + letra + "/" + invitador;
                             //Enviamos al servidor  
                             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                             server.Send(msg);
@@ -168,8 +170,6 @@ namespace WindowsFormsApplication1
                         else
                         {
                             string invitado = trozos[4];
-                            MessageBox.Show(": continua con la partida", invitado);
-                            MessageBox.Show( trozos[3],"La palabra enviada por el jugador es:");
                             Form3 f3 = new Form3();
                             f3.enviado += new Form3.Enviar(Ejecutar);
                             f3.textBox1.Text = invitado;
@@ -183,7 +183,7 @@ namespace WindowsFormsApplication1
                             }
                             else
                             {
-                                string mensaje2 = "8/" + nForm + "/Aceptada/" + textBox3.Text + "/" + invitado;
+                                string mensaje2 = "8/" + nForm + "/Aceptada/" + f3.textBox2.Text + "/" + f3.textBox3.Text + "/" + f3.textBox4.Text + "/" + f3.textBox5.Text + "/" + f3.textBox6.Text + "/" + invitado;
                                 //Enviamos al servidor  
                                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                                 server.Send(msg);
@@ -243,7 +243,7 @@ namespace WindowsFormsApplication1
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
             IPAddress direc = IPAddress.Parse("192.168.56.103");
-            IPEndPoint ipep = new IPEndPoint(direc, 9400);
+            IPEndPoint ipep = new IPEndPoint(direc, 9200);
 
             //Creamos el socket 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

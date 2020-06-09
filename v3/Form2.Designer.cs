@@ -96,18 +96,18 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(43, 103);
+            this.label4.Location = new System.Drawing.Point(12, 106);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(116, 17);
+            this.label4.Size = new System.Drawing.Size(201, 17);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Palabra a enviar:";
+            this.label4.Text = "Letra con la que se va a jugar:";
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(165, 103);
+            this.textBox2.Location = new System.Drawing.Point(219, 103);
             this.textBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(183, 22);
+            this.textBox2.Size = new System.Drawing.Size(129, 22);
             this.textBox2.TabIndex = 7;
             // 
             // Form2
@@ -139,7 +139,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
+        public System.Windows.Forms.TextBox textBox2;
 
     }
 }
