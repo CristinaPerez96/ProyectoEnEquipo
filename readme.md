@@ -24,3 +24,5 @@ Versión 6.5 generado por Cristina Pérez Ordóñez
 Versión 7 generada por Cristina Pérez Ordóñez
 
 Versión 7.5 generada por Cristina Pérez Ordóñez
+
+Versión 7.6 generada por Mayra Vela 
