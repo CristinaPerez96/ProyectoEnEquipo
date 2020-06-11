@@ -18,6 +18,7 @@ namespace WindowsFormsApplication1
         Socket server;
         Thread atender;
 
+
         public delegate void Enviar(string palabra);
         public delegate void EnviarTrozos(string [] trozos);
 
@@ -242,7 +243,7 @@ namespace WindowsFormsApplication1
         {
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
-            IPAddress direc = IPAddress.Parse("192.168.56.103");
+            IPAddress direc = IPAddress.Parse("192.168.56.101");
             IPEndPoint ipep = new IPEndPoint(direc, 9200);
 
             //Creamos el socket 
