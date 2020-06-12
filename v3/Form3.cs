@@ -27,7 +27,7 @@ namespace WindowsFormsApplication1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            enviado(textBox2.Text);
+            enviado("Aceptada");
             this.Close();
         }
 

@@ -20,3 +20,7 @@ La versión 6 consta de las correcciones habladas con el profesor en la última se
  
 
 Versión 6.5 generado por Cristina Pérez Ordóñez
+
+Versión 7 generada por Cristina Pérez Ordóñez
+
+Versión final generada por Cristina Pérez Ordóñez

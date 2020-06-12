@@ -76,6 +76,7 @@ namespace WindowsFormsApplication1
         private void Form4_Load(object sender, EventArgs e)
         {
             label2.Text = usuario;
+            textBox1.Text = usuario;
             label5.Text = nForm.ToString();
         }
 

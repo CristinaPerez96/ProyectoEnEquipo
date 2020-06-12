@@ -71,20 +71,29 @@ namespace WindowsFormsApplication1
                         mensaje = trozos[1].Split('\0')[0];
                         Enviar de = new Enviar(PonMensaje);
                         this.Invoke(de, new object[] { mensaje });
-                        ThreadStart ts = delegate { PonerEnMarchaFormulario4(); };
-                        Thread T = new Thread(ts);
-                        T.Start();
-                        //MessageBox.Show(mensaje);
+                        if (mensaje == "Usuario registrado")
+                        {
+                            ThreadStart ts = delegate { PonerEnMarchaFormulario4(); };
+                            Thread T = new Thread(ts);
+                            T.Start();
+                        }
+                        
                         break;
 
                     case 2: //Inicia sesión
                         mensaje = trozos[1].Split('\0')[0];
                         de = new Enviar(PonMensaje);
                         this.Invoke(de, new object[] { mensaje });
-                        ts = delegate { PonerEnMarchaFormulario4(); };
-                        T = new Thread(ts);
-                        T.Start();
-                        //MessageBox.Show(mensaje);
+                        if (mensaje == "Usuario iniciado")
+                        {
+                            ThreadStart ts = delegate { PonerEnMarchaFormulario4(); };
+                            Thread T = new Thread(ts);
+                            T.Start();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Vuelve a intentarlo, los datos son incorrectos");
+                        }
                         break;
 
                     case 3: //Consulta el jugador que ganó en menor tiempo
@@ -123,23 +132,28 @@ namespace WindowsFormsApplication1
                     case 6: //Notificación lista conectados
                         //EnviarTrozos de1 = new EnviarTrozos(PonConectados);
                         //this.Invoke(de1, new object[] { trozos });
-                        mensaje = trozos[2];
-                        nForm = Convert.ToInt32(trozos[1]);
-                        int i = 3;
-                        while (i<trozos.Length)
+                        mensaje = trozos[2].Split('\0')[0];
+                        if (mensaje != "0")
                         {
-                            mensaje = mensaje + "/" + trozos[i];
-                            i++;
+                            nForm = Convert.ToInt32(trozos[1]);
+                            int i = 3;
+                            while (i < trozos.Length)
+                            {
+                                mensaje = mensaje + "/" + trozos[i];
+                                i++;
+                            }
+                            formularios[nForm].TomaConectados(mensaje);
                         }
-                        formularios[nForm].TomaConectados(mensaje);
                         break;
 
                     case 7: //Recibe invitación del invitador
-                        string invitador = trozos[2].Split('\0')[0];
+                        string invitador = trozos[3].Split('\0')[0];
                         nForm = Convert.ToInt32(trozos[1]);
+                        string letra = trozos[2];
                         Form2 f2 = new Form2();
                         f2.enviado += new Form2.Enviar(Ejecutar);
                         f2.textBox1.Text = invitador;
+                        f2.textBox2.Text = letra;
                         f2.ShowDialog();
                         if (textBox3.Text == "Rechazada")
                         {
@@ -150,7 +164,7 @@ namespace WindowsFormsApplication1
                         }
                         else
                         {
-                            string mensaje2 = "7/" + nForm + "/Aceptada/" + textBox3.Text + "/" + invitador;
+                            string mensaje2 = "7/" + nForm + "/Aceptada/" + letra + "/" + invitador;
                             //Enviamos al servidor  
                             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                             server.Send(msg);
@@ -168,11 +182,11 @@ namespace WindowsFormsApplication1
                         else
                         {
                             string invitado = trozos[4];
-                            MessageBox.Show(": continua con la partida", invitado);
-                            MessageBox.Show( trozos[3],"La palabra enviada por el jugador es:");
+                            letra = trozos[3];
                             Form3 f3 = new Form3();
                             f3.enviado += new Form3.Enviar(Ejecutar);
                             f3.textBox1.Text = invitado;
+                            f3.label8.Text = letra;
                             f3.ShowDialog();
                             if (textBox3.Text == "Rechazada")
                             {
@@ -183,7 +197,7 @@ namespace WindowsFormsApplication1
                             }
                             else
                             {
-                                string mensaje2 = "8/" + nForm + "/Aceptada/" + textBox3.Text + "/" + invitado;
+                                string mensaje2 = "8/" + nForm + "/Aceptada/" + letra + "/" + f3.textBox2.Text + "/" + f3.textBox3.Text + "/" + f3.textBox4.Text + "/" + f3.textBox5.Text + "/" + f3.textBox6.Text + "/" + invitado;
                                 //Enviamos al servidor  
                                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                                 server.Send(msg);
@@ -202,23 +216,28 @@ namespace WindowsFormsApplication1
                         }
                         else
                         {
-                            string invitador2 = trozos[4];
-                            MessageBox.Show(": continua con la partida", invitador2);
-                            MessageBox.Show( trozos[3],"La palabra enviada por el jugador es:");
+                            string invitador2 = trozos[9];
+                            letra = trozos[3];
                             Form3 f3 = new Form3();
                             f3.enviado += new Form3.Enviar(Ejecutar);
                             f3.textBox1.Text = invitador2;
+                            f3.label8.Text = letra;
+                            f3.textBox2.Text = trozos[4];
+                            f3.textBox3.Text = trozos[5];
+                            f3.textBox4.Text = trozos[6];
+                            f3.textBox5.Text = trozos[7];
+                            f3.textBox6.Text = trozos[8];
                             f3.ShowDialog();
                             if (textBox3.Text == "Rechazada")
                             {
-                                string mensaje2 = "7/" + nForm + "/Rechazada/" + invitador2;
+                                string mensaje2 = "8/" + nForm + "/Rechazada/" + invitador2;
                                 // Enviamos al servidor  
                                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                                 server.Send(msg);
                             }
                             else
                             {
-                                string mensaje2 = "7/" + nForm + "/Aceptada/" + textBox3.Text + "/" + invitador2;
+                                string mensaje2 = "8/" + nForm + "/Aceptada/" + letra + "/" + f3.textBox2.Text + "/" + f3.textBox3.Text + "/" + f3.textBox4.Text + "/" + f3.textBox5.Text + "/" + f3.textBox6.Text + "/" + invitador2;
                                 //Enviamos al servidor  
                                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje2);
                                 server.Send(msg);
@@ -227,6 +246,11 @@ namespace WindowsFormsApplication1
                         }
                         break;
 
+                    //case 10: //Elimina al usuario
+                    //    mensaje = trozos[1].Split('\0')[0];
+                    //    de = new Enviar(PonMensaje);
+                    //    this.Invoke(de, new object[] { mensaje });
+                    //    break;
                     
                 }
             }
@@ -243,7 +267,7 @@ namespace WindowsFormsApplication1
             //Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
             //al que deseamos conectarnos
             IPAddress direc = IPAddress.Parse("192.168.56.103");
-            IPEndPoint ipep = new IPEndPoint(direc, 9400);
+            IPEndPoint ipep = new IPEndPoint(direc, 9300);
 
             //Creamos el socket 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -366,6 +390,8 @@ namespace WindowsFormsApplication1
             byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
             server.Send(msg);
         }
+
+        
 
         
     }

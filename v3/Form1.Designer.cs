@@ -40,7 +40,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.Registrado = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -67,7 +66,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(34, 183);
+            this.button3.Location = new System.Drawing.Point(49, 183);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(103, 44);
@@ -78,7 +77,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(157, 183);
+            this.button4.Location = new System.Drawing.Point(232, 183);
             this.button4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(103, 44);
@@ -123,7 +122,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(655, 371);
+            this.textBox3.Location = new System.Drawing.Point(436, 445);
             this.textBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(111, 22);
@@ -132,7 +131,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(515, 371);
+            this.label4.Location = new System.Drawing.Point(315, 450);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(115, 17);
             this.label4.TabIndex = 17;
@@ -156,22 +155,11 @@
             this.label3.TabIndex = 19;
             this.label3.Text = "Respuesta:";
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(288, 183);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(103, 44);
-            this.button5.TabIndex = 20;
-            this.button5.Text = "Dar de baja";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 322);
-            this.Controls.Add(this.button5);
+            this.ClientSize = new System.Drawing.Size(396, 309);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.Registrado);
             this.Controls.Add(this.label4);
@@ -206,7 +194,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label Registrado;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button5;
     }
 }
 
