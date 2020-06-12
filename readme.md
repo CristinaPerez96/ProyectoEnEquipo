@@ -1,26 +1,28 @@
-Versi髇 verificada por Cristina P閞ez Ord篑ez
+Versi贸n verificada por Cristina P茅rez Ord贸帽ez
 
-La versi髇 anterior ha sido modificada porque no funcionaba,
+La versi贸n anterior ha sido modificada porque no funcionaba,
 y actualmente funciona la v4.
 
 <<<<<<< HEAD
-Versi髇 4.1 generada por Cristina
+Versi贸n 4.1 generada por Cristina
 Version 4.1 Verificada por Oriol
 =======
-Versi髇 5 verificada por Cristina P閞ez Ord篑ez
+Versi贸n 5 verificada por Cristina P茅rez Ord贸帽ez
 
-La versi髇 5 ha sido creada para que ambos jugadores puedan enviarse palabras hasta que salgan de la partida, funcionando.
-El crossthreading no ha sido posible solucionarlo y , por tanto, esta versi髇 todav韆 continua con el CheckForIllegal... = false;
+La versi贸n 5 ha sido creada para que ambos jugadores puedan enviarse palabras hasta que salgan de la partida, funcionando.
+El crossthreading no ha sido posible solucionarlo y , por tanto, esta versi贸n todav铆a continua con el CheckForIllegal... = false;
 >>>>>>> dev-v5.1
 
 
-Versi髇 6 creada por Cristina P閞ez Ord篑ez
+Versi贸n 6 creada por Cristina P茅rez Ord贸帽ez
 
-La versi髇 6 consta de las correcciones habladas con el profesor en la 鷏tima sesi髇 de seguimiento.
+La versi贸n 6 consta de las correcciones habladas con el profesor en la 煤ltima sesi贸n de seguimiento.
  
 
-Versi髇 6.5 generado por Cristina P閞ez Ord篑ez
+Versi贸n 6.5 generado por Cristina P茅rez Ord贸帽ez
 
-Versi髇 7 generada por Cristina P閞ez Ord篑ez
+Versi贸n 7 generada por Cristina P茅rez Ord贸帽ez
 
-Versi髇 final generada por Cristina P閞ez Ord篑ez
+Versi贸n final generada por Cristina P茅rez Ord贸帽ez
+
+Versi贸n revisada revisada por Mayra
