@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <mysql.h>
+#include <time.h>
 
 typedef struct{
 	int socket;
@@ -238,14 +239,14 @@ void *AtenderCliente (void *socket)
 		MYSQL_RES *resultado;
 		MYSQL_ROW row;
 		
-		if((codigo!=0)&&(codigo!=1)&&(codigo!=2))
+		if((codigo!=0)&&(codigo!=1)&&(codigo!=2)&&(codigo!=10))
 		{
 			p=strtok(NULL,"/");
 			numForm=atoi(p);
 			printf("Numero formulario: %d\n", numForm);
 		}
 		
-		if((codigo==1)||(codigo==2)||(codigo==4)||(codigo==5))
+		if((codigo!=3)&&(codigo!=6)&&(codigo!=7)&&(codigo!=8))
 		{
 			p=strtok(NULL,"/");
 			strcpy(user,p);
@@ -558,7 +559,8 @@ void *AtenderCliente (void *socket)
 			int encontrado=0;
 			int sock_invitacion;
 			
-			strcpy(letra, "a");
+			srand(time(NULL));
+			sprintf(letra, "%c", 'A'+rand()%(('Z'-'A')+1));
 			p=strtok(NULL,"/");
 			strcpy(invitado,p);
 			//ya tenemos el nombre del invitado
@@ -678,7 +680,6 @@ void *AtenderCliente (void *socket)
 				sock_invitacion= miLista.conectados[i].socket;
 				//enviamos la partida a los dos jugadores
 				write(sock_invitacion, respuestainvitador, strlen(respuestainvitador));
-				write(sock_conn, respuestainvitado, strlen(respuestainvitado));
 			}
 		}
 		
@@ -690,10 +691,16 @@ void *AtenderCliente (void *socket)
 			int sock_invitacion;
 			char contrincante[20];
 			char jugador[20];
+			char animal[20];
+			char ciudad[20];
+			char fruta[20];
+			char nombre2[20];
+			char objeto[20];
 			
 			p=strtok(NULL,"/");
 			strcpy(invitacion,p);
-			if(invitacion =="Rechazada")
+			printf("%s", invitacion);
+			if(strcmp(invitacion,"Rechazada")==0)
 			{
 				p=strtok(NULL, "/");
 				strcpy(contrincante, p);
@@ -710,8 +717,8 @@ void *AtenderCliente (void *socket)
 				sprintf(respuesta, "9/%d/Rechazada/",numForm);
 				strcat(respuesta, jugador);
 				printf("Respuesta: %s\n", respuesta);
-				printf("Contrincante %s", contrincante);
-				printf("Jugador %s", jugador);
+				printf("Contrincante %s\n", contrincante);
+				printf("Jugador %s\n", jugador);
 				i=0;
 				encontrado=0;
 				// buscamos el socket del invitado y le enviamos el mensaje "7/Invitador"
@@ -731,7 +738,17 @@ void *AtenderCliente (void *socket)
 			else
 			{
 				p=strtok(NULL,"/");
-				strcpy(palabra, p);
+				strcpy(letra, p);
+				p=strtok(NULL,"/");
+				strcpy(animal, p);
+				p=strtok(NULL,"/");
+				strcpy(fruta, p);
+				p=strtok(NULL,"/");
+				strcpy(ciudad, p);
+				p=strtok(NULL,"/");
+				strcpy(nombre2, p);
+				p=strtok(NULL,"/");
+				strcpy(objeto, p);
 				p=strtok(NULL,"/");
 				strcpy(contrincante,p);
 				while((i<miLista.num)&&(!encontrado))
@@ -744,9 +761,86 @@ void *AtenderCliente (void *socket)
 				if(encontrado==1)
 					sprintf(jugador, miLista.conectados[i].nombre);
 				printf("Jugador: %s\n", jugador);
+				sprintf(respuesta, "9/%d/Aceptada/",numForm);
+				strcat(respuesta, letra);
+				strcat(respuesta, "/");
+				strcat(respuesta, animal);
+				strcat(respuesta, "/");
+				strcat(respuesta, fruta);
+				strcat(respuesta,"/");
+				strcat(respuesta, ciudad);
+				strcat(respuesta, "/");
+				strcat(respuesta, nombre2);
+				strcat(respuesta,"/");
+				strcat(respuesta, objeto);
+				strcat(respuesta,"/");
+				strcat(respuesta, jugador);
+				printf("%s", respuesta);
+				i=0;
+				encontrado=0;
+				// buscamos el socket del invitado y le enviamos el mensaje "7/Invitador"
+				while((i<miLista.num)&&(encontrado==0))
+				{
+					if(strcmp(miLista.conectados[i].nombre, contrincante)==0)
+						encontrado=1;
+					else
+						i++;
+				}
+				if(encontrado!=0)
+				{
+					sock_invitacion=miLista.conectados[i].socket;
+					write(sock_invitacion, respuesta, strlen(respuesta));
+				}
 			}
 			
 		}
+/*		else if(codigo==10)*/
+/*		{*/
+/*			strcpy(consulta, "DELETE FROM jugador WHERE jugador.nombre='");*/
+/*			strcat(consulta,user);*/
+/*			strcat(consulta, "'");*/
+/*			err=mysql_query (conn, consulta);*/
+/*			if (err!=0) {*/
+/*				printf ("Error al consultar datos de la base %u %s\n",*/
+/*						mysql_errno(conn), mysql_error(conn));*/
+/*				strcpy(respuesta, "10/Error al consultar la base de datos");*/
+/*				exit (1);*/
+/*			}*/
+/*			recogemos el resultado de la consulta. El resultado de la*/
+/*			consulta se devuelve en una variable del tipo puntero a*/
+/*			MYSQL_RES tal y como hemos declarado anteriormente.*/
+/*			Se trata de una tabla virtual en memoria que es la copia*/
+/*			de la tabla real en disco.*/
+/*			resultado = mysql_store_result (conn);*/
+/*			 El resultado es una estructura matricial en memoria*/
+/*			 en la que cada fila contiene los datos de una persona.*/
+			
+/*			 Ahora obtenemos la primera fila que se almacena en una*/
+/*			 variable de tipo MYSQL_ROW*/
+/*			row = mysql_fetch_row (resultado);*/
+/*			 En una fila hay tantas columnas como datos tiene una*/
+/*			 persona. En nuestro caso hay tres columnas: dni(row[0]),*/
+/*			 nombre(row[1]) y edad (row[2]).*/
+/*			if (row == NULL)*/
+/*			{*/
+/*				printf ("No se han obtenido datos en la consulta\n");*/
+/*				strcpy(respuesta, "10/No se han obtenido datos la consulta");*/
+/*			}*/
+/*			else*/
+/*			{*/
+/*				while (row !=NULL) */
+/*				{*/
+/*					 la columna 0 contiene una palabra que es el id*/
+/*					 lo convertimos a entero */
+/*					id = atoi (row[0]);*/
+					 /*las columnas 0 , 1 y 2 contienen id , nombre y DNI*/
+/*					printf ("Los datos del jugador son id: %d, user: %s, password: %s\n", id, row[1], row[2]);*/
+					 /*obtenemos la siguiente fila*/
+/*					row = mysql_fetch_row (resultado);*/
+/*				}*/
+/*				strcpy(respuesta, "10/Usuario eliminado");*/
+/*			}*/
+/*		}*/
 		
 		
 		if((codigo!=0)&&(codigo!=6)&&(codigo!=7)&&(codigo!=8))
@@ -754,9 +848,6 @@ void *AtenderCliente (void *socket)
 			printf("Respuesta: %s\n", respuesta);
 			//Enviamos respuesta
 			write(sock_conn, respuesta, strlen(respuesta));
-			pthread_mutex_lock(&mutex);//No me interrumpas
-			contadorservicios++;
-			pthread_mutex_unlock(&mutex);//Ya puedes interrumpir
 			//notificar a todos los clientes conectados
 			char notificacion[100];
 			DameConectados(&miLista, misconectados);
@@ -811,7 +902,7 @@ int main(int argc, char *argv[])
 	//htonl formatea el numero que recibe al formato necesario
 	serv_adr.sin_addr.s_addr=htonl(INADDR_ANY);
 	//establecemos el puerto de escucha
-	serv_adr.sin_port=htons(9200);
+	serv_adr.sin_port=htons(9300);
 	if(bind(sock_listen,(struct sockaddr *) &serv_adr, sizeof(serv_adr))<0)
 		printf("Error en el bind");
 	if(listen(sock_listen,3) <0)
